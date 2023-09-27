@@ -1,14 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
-import { fs } from "file-system";
+import * as fs from "fs";
 
 enum CurrencyEnum {
   USD = " USD",
   UAH = "UAH",
 }
-
-// console.log(CurrencyEnum.USD);
-
-// console.log(uuidv4());
 
 class Transaction {
   id: string;
@@ -20,10 +16,6 @@ class Transaction {
     this.currency = currency;
   }
 }
-
-// console.log(
-//   `Transaction ID: ${transaction1.id} \n Transaction Amount: ${transaction1.amount} \n Transaction Currency: ${transaction1.currency}`
-// );
 
 class Card {
   transactions: Transaction[];
@@ -64,4 +56,24 @@ class Card {
   }
 }
 
-export { Transaction, Card, CurrencyEnum };
+/////////////// TEST PART:
+
+const myCard = new Card();
+
+// CREATED NEW CARD
+
+const myTransaction = new Transaction(200, CurrencyEnum.UAH);
+myCard.AddTransaction(myTransaction);
+// CREATED NEW TRANSACTION, AND ADD IT WITH ITS OBJECT
+
+myCard.AddTransactionAdvanced(500, CurrencyEnum.USD);
+// CREATED NEW TRANSACTION WITH AMOUNT AND CURRENCY
+
+// export { Transaction, Card, CurrencyEnum };
+
+console.log(myCard.GetTransaction("3975a9f8-e625-4409-8a5d-fe92437e059b"););
+// FIND THE TRANSACTION WITH AN ID
+
+console.log(myCard.GetBalance(CurrencyEnum.UAH));
+
+// GET BALANCE WITH CURRENCY
