@@ -38,13 +38,13 @@ var Card = /** @class */ (function () {
     return specifiedTransaction || null;
   };
   Card.prototype.GetBalance = function (currency) {
-    var balance = this.transactions
-      .filter(function (transaction) {
-        return transaction.currency === currency;
-      })
-      .reduce(function (total, transaction) {
-        return total + transaction.amount;
-      }, 0);
+    var balance = 0;
+    for (var _i = 0, _a = this.transactions; _i < _a.length; _i++) {
+      var transaction = _a[_i];
+      if (transaction.currency === currency) {
+        balance += transaction.amount;
+      }
+    }
     return balance;
   };
   Card.prototype.writeTransactionsToFile = function () {
@@ -52,7 +52,7 @@ var Card = /** @class */ (function () {
   };
   return Card;
 })();
-/////////////// TEST PART:
+//////////////////////////////////////////////////////////// TEST PART
 var myCard = new Card();
 // CREATED NEW CARD
 var myTransaction = new Transaction(200, CurrencyEnum.UAH);

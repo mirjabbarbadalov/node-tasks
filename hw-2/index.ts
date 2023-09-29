@@ -45,9 +45,12 @@ class Card {
   }
 
   GetBalance(currency: CurrencyEnum): number {
-    const balance = this.transactions
-      .filter((transaction) => transaction.currency === currency)
-      .reduce((total, transaction) => total + transaction.amount, 0);
+    let balance = 0;
+    for (const transaction of this.transactions) {
+      if (transaction.currency === currency) {
+        balance += transaction.amount;
+      }
+    }
     return balance;
   }
 
