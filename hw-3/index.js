@@ -221,7 +221,20 @@ const newsletterServer = http.createServer((req, res) => {
   const [size, sizeNumber] = secondPart.split("=");
   console.log(size, sizeNumber);
 
-  const lengthOfData = newsData.length();
+  const lengthOfData = newsData.length;
+  console.log(lengthOfData);
+
+  // TOTAL = 40 PAGE:X SIZE: Y
+  // STARTINDEX=? LASTINDEX=?
+  // STARTINDEX = (PAGE - 1)*SIZE
+  // LASTINDEX = PAGE*SIZE-1
+  const startIndex = (parseInt(pageNumber) - 1) * parseInt(size);
+  const lastIndex = parseInt(pageNumber) * parseInt(size) - 1;
+
+  if ((page === "page") & (size === "size")) {
+  } else {
+    res.writeHead(404, "Wrong Path");
+  }
 
   // console.log(ourPath); ==>> [ 'page=1', 'size=30' ]
   res.end();
