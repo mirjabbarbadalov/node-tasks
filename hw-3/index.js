@@ -206,7 +206,7 @@ const newsData = [
 ];
 
 const newsletterServer = http.createServer((req, res) => {
-  res.write("hello world");
+  res.writeHead(200, "ok!");
   // console.log(req.url);
   const ourPath = req.url.split("/?")[1].split("&");
 
@@ -216,24 +216,48 @@ const newsletterServer = http.createServer((req, res) => {
   // console.log(pagePart.split("=")); ===>>>[ 'page', '1' ]
 
   const [page, pageNumber] = firstPart.split("=");
-  console.log(page, pageNumber);
+  // console.log(page, pageNumber);
 
   const [size, sizeNumber] = secondPart.split("=");
-  console.log(size, sizeNumber);
+  // console.log(size, sizeNumber);
 
   const lengthOfData = newsData.length;
-  console.log(lengthOfData);
+  // console.log(lengthOfData);
 
   // TOTAL = 40 PAGE:X SIZE: Y
   // STARTINDEX=? LASTINDEX=?
+
   // STARTINDEX = (PAGE - 1)*SIZE
   // LASTINDEX = PAGE*SIZE-1
-  const startIndex = (parseInt(pageNumber) - 1) * parseInt(size);
-  const lastIndex = parseInt(pageNumber) * parseInt(size) - 1;
+
+  const startIndex = (parseInt(pageNumber) - 1) * parseInt(sizeNumber);
+  const lastIndex = parseInt(pageNumber) * parseInt(sizeNumber);
+
+  console.log(startIndex, lastIndex);
+
+  const dataForSend = newsData.slice(startIndex, lastIndex);
 
   if ((page === "page") & (size === "size")) {
+    // res.writeHead(200, { "Content-Type": "application/json" });
+    // res.write(JSON.stringify(dataForSend));
+
+    // res.writeHead(200, { "Content-type": "application/json; charset=utf-8" });
+
+    if (dataForSend.length === 0) {
+      res.writeHead(200, {
+        "Content-Type": "application/json",
+      });
+      res.write(JSON.stringify([]));
+      res.end();
+    } else {
+      res.writeHead(200, {
+        "Content-Type": "application/json",
+      });
+      res.write(JSON.stringify(dataForSend, null, 2));
+      res.end();
+    }
   } else {
-    res.writeHead(404, "Wrong Path");
+    res.writeHead(500, "Wrong Path");
   }
 
   // console.log(ourPath); ==>> [ 'page=1', 'size=30' ]
