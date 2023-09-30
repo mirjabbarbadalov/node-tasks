@@ -214,6 +214,21 @@ const PORT = process.env.PORT;
 const app = express();
 app.use(express.json());
 
+//  LOGGING
+
+app.use((req, res, next) => {
+  const method = req.method;
+  const url = req.originalUrl;
+  const queryParams = JSON.stringify(req.query);
+  const body = JSON.stringify(req.body);
+
+  const logMessage = `${method} ${url} query:${queryParams} body:${body}`;
+
+  console.log(logMessage);
+
+  next();
+});
+
 // GET ALL NEWS
 
 app.get("/api/newsposts", (req, res) => {
@@ -297,6 +312,25 @@ app.put("/api/newsposts/:id", (req, res) => {
         "Content-Type": "application/json",
       })
       .end(JSON.stringify(modifiedNews));
+  } catch (error) {
+    res.writeHead(500, "Error!");
+    res.end(JSON.stringify(error));
+  }
+});
+
+// DELETE METHOD
+
+app.delete("/api/newsposts/:id", (req, res) => {
+  const idToDelete = +req.params.id;
+  const updatedData = newsData.filter((news) => news.id !== idToDelete);
+
+  try {
+    newsData = updatedData;
+    res
+      .writeHead(200, "Success!", {
+        "Content-Type": "application/json",
+      })
+      .end(`${idToDelete} item deleted!`);
   } catch (error) {
     res.writeHead(500, "Error!");
     res.end(JSON.stringify(error));
