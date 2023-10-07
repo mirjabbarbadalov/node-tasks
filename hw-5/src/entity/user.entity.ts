@@ -1,4 +1,3 @@
-import { Author } from "./../dto/newsposts.dto";
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -7,11 +6,8 @@ export class NewsPosts {
   id: number;
 
   @Column()
-  title: string;
+  email: string;
 
   @Column()
-  text: string;
-
-  @Column("varchar", { nullable: true })
-  author: Author;
+  password: string;
 }

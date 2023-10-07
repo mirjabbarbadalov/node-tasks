@@ -7,7 +7,7 @@ export interface EditNewsPost {
   text: string;
 }
 
-export interface User {
+export interface Author {
   first_name: string;
   last_name: string;
 }
