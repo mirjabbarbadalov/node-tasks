@@ -12,6 +12,6 @@ export class NewsPosts {
   @Column()
   text: string;
 
-  @Column("varchar", { nullable: true })
+  @Column()
   author: Author;
 }
