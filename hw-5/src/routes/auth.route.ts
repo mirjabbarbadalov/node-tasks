@@ -1,13 +1,17 @@
+import dotenv from "dotenv";
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { User } from "../entity/user.entity";
-import { AppDataSource } from "../../data-source";
+import { User } from "../entity/user.entity.ts";
+import { AppDataSource } from "../../data-source.ts";
+
+dotenv.config();
 
 const authRouter = Router();
 
 authRouter.post("/register", async (req, res) => {
   const { email, password, confirmPassword } = req.body;
+  console.log(email, password, confirmPassword);
 
   if (!email || !password || !confirmPassword) {
     return res.status(400).json({ msg: "Please provide all required fields." });
@@ -18,7 +22,10 @@ authRouter.post("/register", async (req, res) => {
   }
 
   try {
-    const existingUser = await AppDataSource.getRepository(User).findOne(email);
+    const existingUser = await AppDataSource.getRepository(User).findOne({
+      where: { email },
+    });
+
     if (existingUser) {
       return res.status(400).json({ msg: "User already exists." });
     }
@@ -31,7 +38,7 @@ authRouter.post("/register", async (req, res) => {
     });
     await AppDataSource.getRepository(User).save(newUser);
 
-    const token = jwt.sign({ userId: newUser.id }, "your-secret-key-here", {
+    const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
 
@@ -42,32 +49,29 @@ authRouter.post("/register", async (req, res) => {
   }
 });
 
-// Login endpoint
 authRouter.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  // Validate input
   if (!email || !password) {
     return res.status(400).json({ msg: "Please provide all required fields." });
   }
 
   try {
-    // Check if the user exists
-    const user = await User.findOne({ email });
+    const user = await AppDataSource.getRepository(User).findOne({
+      where: { email },
+    });
 
     if (!user) {
       return res.status(400).json({ msg: "User does not exist." });
     }
 
-    // Compare the provided password with the hashed password
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
       return res.status(400).json({ msg: "Invalid credentials." });
     }
 
-    // Generate a JWT token
-    const token = jwt.sign({ userId: user.id }, "your-secret-key-here", {
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
 

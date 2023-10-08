@@ -1,9 +1,10 @@
 import { Router } from "express";
 import newspostsService from "../services/newsposts.service.ts";
+import { authenticateToken } from "../../middleware/auth.middleware.ts";
 
 export const newsPostRouter = new Router();
 
-newsPostRouter.get("/", async (req, res) => {
+newsPostRouter.get("/", authenticateToken, async (req, res) => {
   const newsposts = await newspostsService.getPosts(req.query);
   res.setHeader("content-type", "application/json").json(newsposts);
 });
