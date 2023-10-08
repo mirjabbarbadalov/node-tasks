@@ -1,5 +1,6 @@
-import { Author } from "./../dto/newsposts.dto";
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+// NewsPosts.ts
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Author } from "./author.entity.ts";
 
 @Entity()
 export class NewsPosts {
@@ -12,6 +13,6 @@ export class NewsPosts {
   @Column()
   text: string;
 
-  @Column()
+  @ManyToOne(() => Author)
   author: Author;
 }
