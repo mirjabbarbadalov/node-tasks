@@ -8,11 +8,14 @@ const getPosts = async (query) => {
   const page = query.page;
   const size = query.size;
 
-  const startIndex = (parseInt(page) - 1) * parseInt(size);
-  const lastIndex = parseInt(page) * parseInt(size);
+  if (page && size) {
+    const startIndex = (parseInt(page) - 1) * parseInt(size);
+    const lastIndex = parseInt(page) * parseInt(size);
 
-  const dataForSend = allPosts.slice(startIndex, lastIndex);
-  return dataForSend;
+    const dataForSend = allPosts.slice(startIndex, lastIndex);
+    return dataForSend;
+  }
+  return allPosts;
 };
 
 const getPostById = async (id: number) => {
