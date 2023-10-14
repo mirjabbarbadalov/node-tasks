@@ -8,7 +8,7 @@ newsPostRouter.get("/", authenticateToken, async (req, res) => {
   const newsposts = await newspostsService.getPosts(req.query);
   res.setHeader("content-type", "application/json").json(newsposts);
 });
-newsPostRouter.get("/:id", async (req, res) => {
+newsPostRouter.get("/:id", authenticateToken, async (req, res) => {
   const post = await newspostsService.getPostById(+req.params.id);
   if (!post) {
     res
