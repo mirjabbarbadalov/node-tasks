@@ -16,7 +16,7 @@ const app = express();
 
 app.use(express.json());
 app.use("/api/newsposts", newsPostRouter);
-app.use("/auth", authRouter);
+app.use("/api", authRouter);
 
 app.get("/", (req, res) => {
   res.json("server is working");
